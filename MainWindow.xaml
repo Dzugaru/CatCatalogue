@@ -1,0 +1,36 @@
+﻿<Window x:Class="CatCatalogue.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CatCatalogue"
+        d:DataContext="{d:DesignInstance local:ViewModel, IsDesignTimeCreatable=True}"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Window.Resources>
+        <DataTemplate x:Key="CapitalLetter">
+            <TextBlock Text="{Binding}" FontSize="25"></TextBlock>
+        </DataTemplate>
+        <DataTemplate x:Key="CompanyInfo">
+            <TextBlock Text="{Binding}"></TextBlock>            
+        </DataTemplate>
+        <local:TestTemplateSelector x:Key="TemplateSelector"/>
+    </Window.Resources>
+    <Grid>
+        <StackPanel>
+            <TextBox Text="{Binding TestText}"/>
+            <Button Command="{Binding TestCommand}" Height="20" Content="Do it!"/>
+            <ItemsControl ItemsSource="{Binding TestList}" ItemTemplateSelector="{StaticResource TemplateSelector}">
+                <!--<ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock>L:</TextBlock>
+                            <TextBlock Text="{Binding}"></TextBlock>
+                        </StackPanel>                        
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>-->
+            </ItemsControl>
+        </StackPanel>
+
+    </Grid>
+</Window>
