@@ -11,8 +11,22 @@
         <DataTemplate x:Key="CapitalLetter">
             <TextBlock Text="{Binding}" FontSize="25"></TextBlock>
         </DataTemplate>
-        <DataTemplate x:Key="CompanyInfo">
-            <TextBlock Text="{Binding}"></TextBlock>            
+        <DataTemplate x:Key="VendorInfo">
+            <StackPanel>
+                <TextBlock Text="{Binding Name}"></TextBlock>
+                <ItemsControl ItemsSource="{Binding Products}" Margin="10 0 0 0">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <BulletDecorator>
+                                <BulletDecorator.Bullet>
+                                    <Ellipse Height="5" Width="5" Fill="Black"/>
+                                </BulletDecorator.Bullet>
+                                <TextBlock Text="{Binding Name}" Margin="5 0 0 0"></TextBlock>
+                            </BulletDecorator>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
         </DataTemplate>
         <local:TestTemplateSelector x:Key="TemplateSelector"/>
     </Window.Resources>
