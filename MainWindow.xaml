@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CatCatalogue"
+        xmlns:prism="http://www.codeplex.com/prism"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         d:DataContext="{d:DesignInstance local:ViewModel, IsDesignTimeCreatable=True}"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
@@ -29,12 +31,28 @@
             </StackPanel>
         </DataTemplate>
         <local:TestTemplateSelector x:Key="TemplateSelector"/>
+
+        <Style x:Key="EditProductWindow" TargetType="Window">
+            <Setter Property="ResizeMode" Value="NoResize"/>
+            <Setter Property="SizeToContent" Value="WidthAndHeight"/>
+        </Style>
     </Window.Resources>
+
+    <i:Interaction.Triggers>
+        <prism:InteractionRequestTrigger SourceObject="{Binding EditProductRequest, Mode=OneWay}">
+            <prism:PopupWindowAction IsModal="True" WindowStyle="{StaticResource EditProductWindow}">
+                <prism:PopupWindowAction.WindowContent>
+                    <local:EditProduct/>
+                </prism:PopupWindowAction.WindowContent>
+            </prism:PopupWindowAction>
+        </prism:InteractionRequestTrigger>
+    </i:Interaction.Triggers>
+    
     <Grid>
-        <StackPanel>
-            <TextBox Text="{Binding TestText}"/>
-            <Button Command="{Binding TestCommand}" Height="20" Content="Do it!"/>
-            <ItemsControl ItemsSource="{Binding TestList}" ItemTemplateSelector="{StaticResource TemplateSelector}">
+        <StackPanel Margin="5">
+            <Button Command="{Binding AddProductCmd}" Height="30" Width="30" Content="+" FontSize="32" HorizontalAlignment="Left" Padding="0 -12 0 0 " />
+
+            <ItemsControl ItemsSource="{Binding ProductList}" ItemTemplateSelector="{StaticResource TemplateSelector}">
                 <!--<ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">

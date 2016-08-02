@@ -10,38 +10,81 @@ using System.Windows.Data;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows;
+using Prism.Interactivity.InteractionRequest;
 
 namespace CatCatalogue
 {    
     class ViewModel : BindableBase
-    {
-        string testText = "Alb";
-        ObservableCollection<object> testList;
+    {  
+        ObservableCollection<object> productList;        
 
-        public string TestText
-        {
-            get { return testText; }
-            set { SetProperty(ref testText, value); }
-        }
+        public ICollectionView ProductList { get; private set; }
 
-        public ICollectionView TestList { get; private set; }
+        public DelegateCommand AddProductCmd { get; private set; }
 
-        public DelegateCommand TestCommand { get; private set; }
+        public InteractionRequest<INotification> EditProductRequest { get; private set; }
 
         public ViewModel()
         {
             var vendor1 = new Vendor("Тимотеи");
             vendor1.products.Add(new Product() { Name = "Шампунь", Rating = 10 });
 
-            testList = new ObservableCollection<object>(new List<object>()
+            productList = new ObservableCollection<object>(new List<object>()
             {
                 "A",
                 "Б",
                 vendor1
             });    
-            TestList = new ListCollectionView(testList);
+            ProductList = new ListCollectionView(productList);
 
-            TestCommand = new DelegateCommand(() => TestText = "Bla");
+            AddProductCmd = new DelegateCommand(AddProduct);
+            EditProductRequest = new InteractionRequest<INotification>();
+        }
+
+        private void AddProduct()
+        {
+            EditProductRequest.Raise(new EditProductNotification("3137"));
+        }
+    }
+
+    class EditProductNotification : Confirmation
+    {
+        public string Text;
+
+        public EditProductNotification(string text)
+        {
+            this.Text = text;
+            this.Title = "Редактировать";
+        }
+    }
+
+    class EditProductViewModel : BindableBase, IInteractionRequestAware
+    {
+        INotification notification;
+
+        public Action FinishInteraction { get; set; }
+        public INotification Notification
+        {
+            get { return notification; }
+            set { notification = value; OnNotificationSet(); }
+        }
+
+        string testText;
+        public string TestText
+        {
+            get { return testText; }
+            set { SetProperty(ref testText, value); }
+        }
+
+        public EditProductViewModel()
+        {
+            TestText = "BlablablaBla";
+        }
+
+        void OnNotificationSet()
+        {
+            EditProductNotification tNotif = (EditProductNotification)notification;
+            TestText = tNotif.Text;
         }
     }
 
